@@ -11,93 +11,85 @@ import java.util.HashMap;
 
 import com.jspsmart.upload.Request;
 
+import http.servlet.CookieServlet;
+import http.servlet.ForwardServlet;
+import http.servlet.GetCookieServlet;
 import http.servlet.TestServlet;
 
 public class Process {
-	//定义servlet容器
-	private HashMap<String , HttpServlet> servletContainer = new HashMap<>();
-	{
-		//添加一个servlet
-		servletContainer.put("hello.s", new TestServlet());
+	// 定义 Servlet 容器
+		private HashMap<String,HttpServlet> servletContainer = new HashMap<>();
 		
-		
-	}
-	
-	public void process(Socket socket) {
-
-					InputStream in;
-					OutputStream out;
-					try {
-					in = socket.getInputStream();
-					out = socket.getOutputStream();
-					//读取报文内容
-					
-					byte[] buffer = new byte[1024];
-					int count = in.read(buffer);
-					String content = new String(buffer,0,count);
-					parseRequest(content);
-					
-					HttpServletRequest request = parseRequest(content);
-					HttpServletResponse response =new HttpServletResponse(request,out);
-					
-					String rootPath= "D:/tomcat/webapps/photo";
-					String filePath = request.getRequestURL();
-					String diskPath= rootPath+filePath;
-					//判断访问的文件是否存在
-					/**
-					 * 静态请求：对应这一个html,js,css；
-					 * 动态请求：hello.s
-					 * 非法404请求 即没有物理文件和虚拟文件
-					 * 
-					 */
-					//System.out.println("客户端说："+new String(buffer,0,count));
-					/*
-					 * 页面不存在返回404
-					 * 1，判断物理文件是否存在
-					 * 2，判断虚拟路径中有没有该地址
-					 */
-					
-					if(new File(diskPath).exists()==false) {
-						//静态请求直接commit
-						
-					}else if(servletContainer.containsKey(filePath)) {
-						//127.0.0.1:8080/hello.s
-						
-					//判断虚拟路径中有没有该地址（从容器中寻找）
-						HttpServlet servlet = servletContainer.get(filePath);
-						servlet.service(request, response);
-						
-					
-					}else{
-						//404
-						response.setStatus(404, "Not Found");
-						request.setRequestURL("/404.html");
-					
-					}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					try {
-						socket.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					//解析请求报文
-					
-					//给予对应的响应
-					
-					
-							
-				}
+		{
+			// 添加一个Servlet 实现响应重定向
+			servletContainer.put("/redirect.s", new RedirectServlet());
+			// 添加一个Servlet 实现请求转发
+			servletContainer.put("/forward.s", new ForwardServlet());
 			
-	public HttpServletRequest parseRequest(String content) {
+			servletContainer.put("/hello.s", new TestServlet());
+			
+			servletContainer.put("/cookie.s", new CookieServlet());
+			
+			servletContainer.put("/user/getcookie.s", new GetCookieServlet());
+		}
 		
-		return new HttpServletRequest(content);
+		public void process(Socket socket){
+			InputStream in;
+			OutputStream out;
+			try {
+				in = socket.getInputStream();
+				out = socket.getOutputStream();
+				
+				// 读取请求报文内容
+				byte[] buf = new byte[1024];
+				int count;
+				count = in.read(buf);
+				String content = new String(buf, 0, count);
+				System.out.println(content);
+				// 解析请求报
+				HttpServletRequest request = parseRequest(content);
+				HttpServletResponse response = new HttpServletResponse(request, out);
+				
+				/**
+				 * 静态请求：对应着一个html、js、css。。。
+				 * 动态请求：hello.s
+				 * 非法404请求	  即没有物理问文件也没有虚拟的地址
+				 */
+				
+				// 判断物理文件是否存在
+				String rootPath = "D:/Tomcat/webapps/photo";
+				String webPath = request.getRequestURL();
+				// 判断访问文件是否存在			
+				String diskPath = rootPath + webPath;
+				if(new File(diskPath).exists() == true){
+					// 静态请求直接commit
+				} else if(servletContainer.containsKey(webPath)) {
+					// 127.0.0.1:8080/hello.s
+					// 判断虚拟路径中有没有该地址（Servlet容器 中去找）
+					// 动态请求先由servlet 处理
+					HttpServlet servlet = servletContainer.get(webPath);
+					servlet.service(request, response);
+				} else {
+					// 404   改写 资源文件 为 404.html
+					response.setStatus(404,"Not Found");
+					request.setRequestURL("/404.html");
+				}
+				
+				response.commit();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
-	}
+		public HttpServletRequest parseRequest(String content){
+			HttpServletRequest request = new HttpServletRequest(content);
+			return request;
+		}
 
 }

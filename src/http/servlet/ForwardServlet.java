@@ -1,33 +1,25 @@
 package http.servlet;
 
-import java.io.PrintWriter;
-
 import http.HttpServlet;
 import http.HttpServletRequest;
 import http.HttpServletResponse;
 
-public class TestServlet extends HttpServlet {
+public class ForwardServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
 
-		/**
-		 * 作业
-		 */
-		
-		response.setContentType("text/html");
-		
-		PrintWriter pw = response.getWriter();
-		
-		pw.print("<h1>Hello world!</h1>");
-		
+		RequestDispatcher rd = request.getRequestDispatcher("/index.html");
+		rd.forward(request,response);
 	}
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
-		doGet(request, response);
+		// TODO Auto-generated method stub
+		super.doPost(request, response);
 	}
-	
 
 	
+
 }
