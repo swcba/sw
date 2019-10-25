@@ -40,10 +40,19 @@ public class Process {
 				in = socket.getInputStream();
 				out = socket.getOutputStream();
 				
+				
+				
 				// 读取请求报文内容
 				byte[] buf = new byte[1024];
 				int count;
 				count = in.read(buf);
+				
+				// 解决空请求导致的报错
+				if(count <=0){
+					return;
+				}
+				
+				
 				String content = new String(buf, 0, count);
 				System.out.println(content);
 				// 解析请求报
