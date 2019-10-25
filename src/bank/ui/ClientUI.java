@@ -76,7 +76,7 @@ public class ClientUI {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				msg = new register(shell, SWT.NONE).open();
+				 new register(shell, SWT.NONE,socket).open();
 			}
 		});
 		GridData gd_button = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);

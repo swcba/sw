@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import java.net.Socket;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -15,19 +16,22 @@ import org.eclipse.swt.events.SelectionEvent;
 
 public class register extends Dialog {
 
-	protected Map<String,Object> result;
+	protected Object result;
 	protected Shell shell;
 	private Text text;
 	private Text text_1;
+	private Socket socket;
 	
 	/**
 	 * Create the dialog.
 	 * @param parent
 	 * @param style
 	 */
-	public register(Shell parent, int style) {
+	public register(Shell parent, int style,Socket socket) {
 		super(parent, style);
 		setText("SWT Dialog");
+		this.socket=socket;
+		
 	
 	}
 
@@ -35,7 +39,7 @@ public class register extends Dialog {
 	 * Open the dialog.
 	 * @return the result
 	 */
-	public Map<String,Object> open() {
+	public Object open() {
 		createContents();
 		shell.open();
 		shell.layout();
@@ -79,8 +83,7 @@ public class register extends Dialog {
 				
 				float money = Float.parseFloat(text_1.getText());
 				
-				result.put("卡号", cardid);
-				result.put("开户金额", money);
+				
 				
 			}
 		});
