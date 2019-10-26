@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-public class register extends Dialog {
+public class diposit extends Dialog {
 
 	protected Object result;
 	protected Shell shell;
@@ -34,7 +34,7 @@ public class register extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public register(Shell parent, int style,Socket socket) {
+	public diposit(Shell parent, int style,Socket socket) {
 		super(parent, style);
 		setText("SWT Dialog");
 		this.socket=socket;
@@ -79,7 +79,7 @@ public class register extends Dialog {
 		
 		Label lblNewLabel_1 = new Label(shell, SWT.NONE);
 		lblNewLabel_1.setBounds(82, 138, 61, 17);
-		lblNewLabel_1.setText("开户金额");
+		lblNewLabel_1.setText("储存金额");
 		
 		Button btnNewButton = new Button(shell, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -100,7 +100,7 @@ public class register extends Dialog {
 					DataInputStream dis = new DataInputStream(in);
 					DataOutputStream dos = new DataOutputStream(out);
 				
-					dos.writeUTF("register");
+					dos.writeUTF("diposit");
 					dos.writeUTF(cardid);
 					dos.writeFloat(money);
 					dos.flush();
@@ -128,7 +128,7 @@ public class register extends Dialog {
 			}
 		});
 		btnNewButton.setBounds(194, 207, 80, 27);
-		btnNewButton.setText("开户");
+		btnNewButton.setText("存款");
 		
 		Button btnNewButton_1 = new Button(shell, SWT.NONE);
 		btnNewButton_1.addSelectionListener(new SelectionAdapter() {

@@ -1,26 +1,24 @@
 package bank.ui;
 
-import org.eclipse.swt.widgets.Dialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
-public class register extends Dialog {
+public class transfer extends Dialog {
 
 	protected Object result;
 	protected Shell shell;
@@ -28,20 +26,21 @@ public class register extends Dialog {
 	private Text text_1;
 	private Socket socket;
 	private String msg;
+	private Text text_2;
 	
+
 	/**
 	 * Create the dialog.
 	 * @param parent
 	 * @param style
 	 */
-	public register(Shell parent, int style,Socket socket) {
+	public transfer(Shell parent, int style,Socket socket) {
 		super(parent, style);
 		setText("SWT Dialog");
 		this.socket=socket;
 		
 	
 	}
-
 	/**
 	 * Open the dialog.
 	 * @return the result
@@ -79,15 +78,15 @@ public class register extends Dialog {
 		
 		Label lblNewLabel_1 = new Label(shell, SWT.NONE);
 		lblNewLabel_1.setBounds(82, 138, 61, 17);
-		lblNewLabel_1.setText("开户金额");
+		lblNewLabel_1.setText("转账金额");
 		
 		Button btnNewButton = new Button(shell, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				String cardid = text.getText();
-				
+				String cardid1 = text.getText();
+				String cardid2 = text_2.getText();
 				float money = Float.parseFloat(text_1.getText());
 				
 				
@@ -100,8 +99,9 @@ public class register extends Dialog {
 					DataInputStream dis = new DataInputStream(in);
 					DataOutputStream dos = new DataOutputStream(out);
 				
-					dos.writeUTF("register");
-					dos.writeUTF(cardid);
+					dos.writeUTF("transfer");
+					dos.writeUTF(cardid1);
+					dos.writeUTF(cardid2);
 					dos.writeFloat(money);
 					dos.flush();
 					
@@ -128,7 +128,7 @@ public class register extends Dialog {
 			}
 		});
 		btnNewButton.setBounds(194, 207, 80, 27);
-		btnNewButton.setText("开户");
+		btnNewButton.setText("确定");
 		
 		Button btnNewButton_1 = new Button(shell, SWT.NONE);
 		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
@@ -139,7 +139,13 @@ public class register extends Dialog {
 		});
 		btnNewButton_1.setBounds(194, 264, 80, 27);
 		btnNewButton_1.setText("退出");
+		
+		Label lblNewLabel_2 = new Label(shell, SWT.NONE);
+		lblNewLabel_2.setBounds(82, 92, 61, 17);
+		lblNewLabel_2.setText("转账卡号");
+		
+		text_2 = new Text(shell, SWT.BORDER);
+		text_2.setBounds(181, 89, 172, 23);
 
 	}
-
 }

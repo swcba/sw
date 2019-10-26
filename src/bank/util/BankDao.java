@@ -23,7 +23,9 @@ public class BankDao {
 	}
 	public String update2(String cardno,float money) {
 		List<Map<String,Object>> user=query(cardno);
-		float balance= Float.parseFloat((String) user.get(0).get("balance"));
+		System.out.println("取款卡号："+user.get(0).get("accountid"));
+		String s= user.get(0).get("balance").toString();
+		float balance= Float.parseFloat(s );
 		if(balance-money<0) {
 			return "余额不足";
 		}else {
@@ -32,6 +34,12 @@ public class BankDao {
 		DBHelper.executeUpdate(sql, money,cardno);
 		return "取款成功";
 		}
+	}
+
+	public String transfer(String cardno1, String cardno2, float money) {
+		update2(cardno1,money);
+		update1(cardno2, money);
+		return "转账成功";
 	}
 
 }

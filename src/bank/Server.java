@@ -112,7 +112,10 @@ public class Server {
 		dos.flush();
 	}
 	//转账
-	public void transfer(String cardno1,String cardno2,float money) {
+	public void transfer(String cardno1,String cardno2,float money) throws IOException {
+		String msg=dao.transfer(cardno1,cardno2, money);
+		dos.writeUTF(msg);
+		dos.flush();
 		
 	}
 }

@@ -76,7 +76,19 @@ public class ClientUI {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				 new register(shell, SWT.NONE,socket).open();
+				 
+				new register(shell, SWT.NONE,socket).open();
+				
+				try {
+					socket = new Socket("127.0.0.1", 8888);
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+				
 			}
 		});
 		GridData gd_button = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
@@ -92,6 +104,25 @@ public class ClientUI {
 		new Label(shell, SWT.NONE);
 
 		Button btnNewButton = new Button(shell, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+					new diposit(shell, SWT.NONE,socket).open();
+
+					try {
+						socket = new Socket("127.0.0.1", 8888);
+					} catch (UnknownHostException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}	
+			}
+			
+			
+		});
 		GridData gd_btnNewButton = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_btnNewButton.widthHint = 99;
 		btnNewButton.setLayoutData(gd_btnNewButton);
@@ -105,6 +136,22 @@ public class ClientUI {
 		new Label(shell, SWT.NONE);
 
 		Button btnNewButton_1 = new Button(shell, SWT.NONE);
+		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				 new withdraw(shell, SWT.NONE,socket).open();
+
+					try {
+						socket = new Socket("127.0.0.1", 8888);
+					} catch (UnknownHostException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}	
+			}
+		});
 		GridData gd_btnNewButton_1 = new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1);
 		gd_btnNewButton_1.widthHint = 97;
 		btnNewButton_1.setLayoutData(gd_btnNewButton_1);
@@ -118,6 +165,22 @@ public class ClientUI {
 		new Label(shell, SWT.NONE);
 
 		Button btnNewButton_2 = new Button(shell, SWT.NONE);
+		btnNewButton_2.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				 new transfer(shell, SWT.NONE,socket).open();
+
+					try {
+						socket = new Socket("127.0.0.1", 8888);
+					} catch (UnknownHostException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}	
+			}
+		});
 		GridData gd_btnNewButton_2 = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_btnNewButton_2.widthHint = 100;
 		btnNewButton_2.setLayoutData(gd_btnNewButton_2);
@@ -131,10 +194,25 @@ public class ClientUI {
 		new Label(shell, SWT.NONE);
 
 		Button btnNewButton_3 = new Button(shell, SWT.NONE);
+		btnNewButton_3.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					socket.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				shell.close();
+			}
+		});
 		GridData gd_btnNewButton_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnNewButton_3.widthHint = 101;
 		btnNewButton_3.setLayoutData(gd_btnNewButton_3);
 		btnNewButton_3.setText("退出");
+		
+		beagn();
 
 	}
 
@@ -165,15 +243,10 @@ public class ClientUI {
 						}
 					});
 				}
-				try {
-					CT = new ClientThread(socket);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
 			}
 
-		};
+		}.start();
 
 	}
 }
