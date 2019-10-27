@@ -79,15 +79,7 @@ public class ClientUI {
 				 
 				new register(shell, SWT.NONE,socket).open();
 				
-				try {
-					socket = new Socket("127.0.0.1", 8888);
-				} catch (UnknownHostException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}	
+					
 				
 			}
 		});
@@ -110,15 +102,7 @@ public class ClientUI {
 				
 					new diposit(shell, SWT.NONE,socket).open();
 
-					try {
-						socket = new Socket("127.0.0.1", 8888);
-					} catch (UnknownHostException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}	
+				
 			}
 			
 			
@@ -141,15 +125,7 @@ public class ClientUI {
 			public void widgetSelected(SelectionEvent e) {
 				 new withdraw(shell, SWT.NONE,socket).open();
 
-					try {
-						socket = new Socket("127.0.0.1", 8888);
-					} catch (UnknownHostException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}	
+					
 			}
 		});
 		GridData gd_btnNewButton_1 = new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1);
@@ -170,15 +146,6 @@ public class ClientUI {
 			public void widgetSelected(SelectionEvent e) {
 				 new transfer(shell, SWT.NONE,socket).open();
 
-					try {
-						socket = new Socket("127.0.0.1", 8888);
-					} catch (UnknownHostException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}	
 			}
 		});
 		GridData gd_btnNewButton_2 = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
@@ -199,6 +166,8 @@ public class ClientUI {
 			public void widgetSelected(SelectionEvent e) {
 				try {
 					socket.close();
+					
+					
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
