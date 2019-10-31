@@ -5,12 +5,29 @@
   <!-- namespace 命名空间  其实就是映射文件在项目中地址 -->
 <mapper namespace="com.yc.damai.dao.ProductMapper">
 
+
+	<!-- 手动映射 -->
+	<resultMap id="baseMapper" type="com.yc.damai.bean.Product">
+	<!-- property 定义实体类  column 数据库的字段名      -->
+	<result property="marketPrice" column="market_price" ></result>
+	<result property="shopPrice" column="shop_price" ></result>
+	<result property="isHot" column="is_Hot" ></result>
+	
+	</resultMap>
+
 	<!-- 查询所有商品 -->
-	<select id="selectAll" resultType="com.yc.damai.bean.Product">
+	<select id="selectAll" resultMap="baseMapper">
 		select * from product
 	</select>
 	<!-- 带参数的查询 命名参数  #{pid} -->
-	<select id="selectByPid" resultType="com.yc.damai.bean.Product">
+	<select id="selectByPid" resultMap="baseMapper">
 		select * from product where pid = #{pid}
 	</select>
+	<!-- 新增 -->
+	<insert id="create">
+		insert into product values(null,#{pname},#{marketPrice},#{shopPrice},
+		#{image},#{pdesc},#{isHot},#{pdate},#{csid})
+	</insert>
+	
+	
 </mapper>
