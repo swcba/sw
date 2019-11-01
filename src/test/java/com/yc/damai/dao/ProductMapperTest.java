@@ -3,7 +3,9 @@ package com.yc.damai.dao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -14,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.yc.damai.bean.Product;
+import com.yc.damai.bean.User;
 
 public class ProductMapperTest {
 	
@@ -31,7 +34,7 @@ public class ProductMapperTest {
 		session = sqlSessionFactory.openSession();
 	}
 	
-	@Test
+	
 	public void testSelectAll() throws IOException{
 		List<Product> list = session.selectList("com.yc.damai.dao.ProductMapper.selectAll");
 		System.out.println(list.size());
@@ -39,12 +42,12 @@ public class ProductMapperTest {
 	}
 	
 	
-	@Test
+	
 	public void testSelectByPid() throws IOException{
 		Product p = session.selectOne("com.yc.damai.dao.ProductMapper.selectByPid", 56);
 		System.out.println(p);
 	}
-	@Test
+	
 	public void testInsert() throws IOException{
 		
 		// 数据库事务管理代码：成功则提交，失败就回滚
@@ -75,5 +78,111 @@ public class ProductMapperTest {
 			session.close();
 		}
 	}
+	
+	@Test
+	public void testSelect() {
+		List<User> list=session.selectList("com.yc.damai.dao.ProductMapper.selectByuid","s");
+		System.out.println("查询结果有："+list.size());
+		for(User p : list) {
+			
+			System.out.println(p.toString());
+			
+		}
+	}
 
+	@Test
+	public void testLogin() {
+		Map<String,String> m = new HashMap<>();
+		m.put("username", "song");
+		m.put("password", "a");
+		List<User> list=session.selectList("com.yc.damai.dao.ProductMapper.selectLogin",m);
+		if(list.size()==0) {
+			System.out.println("该用户信息不存在");
+		}else {
+			System.out.println(list.size());
+			System.out.println("欢迎宁！");
+		}
+		
+		
+	}
+	
+	
+	@Test
+	public void createUser() {
+		
+		
+			try {
+				User user = new User();
+				user.setUid(5);
+				user.setUsername("sw");
+				user.setPassword("yc");
+				user.setName("CBA");
+				user.setEmail("2463079095@qq.com"	);
+				user.setPhone("15197650636");
+				user.setSex("男");
+				user.setCode(null);
+				user.setAddr("hunan");
+				user.setState(0);
+				
+				int count=session.insert("com.yc.damai.dao.ProductMapper.createUser",user);
+				Assert.assertEquals(1, count);
+				
+				// 提交
+				session.commit();
+				
+			} catch (Exception e){
+				e.printStackTrace();
+				// 回滚
+				session.rollback();
+			} finally {
+				// 关闭会话
+				session.close();
+			}
+	}
+	
+	@Test
+	public void updateUser() {
+		
+		try {
+		List<User> list = session.selectList("com.yc.damai.dao.ProductMapper.selectUid", "sw");	
+		User user = list.get(0);
+		System.out.println(user.toString());
+		user.setAddr("湖南");
+		System.out.println(user.toString());
+		 int count = session.update("com.yc.damai.dao.ProductMapper.update",user);
+		 Assert.assertEquals(1, count);
+			// 提交
+		session.commit();
+			
+		} catch (Exception e){
+			e.printStackTrace();
+			// 回滚
+			session.rollback();
+		} finally {
+			// 关闭会话
+			session.close();
+		
+		}
+	}
+	
+	
+	
+	public void delete() {
+		try {
+			
+			int count = session.delete("com.yc.damai.dao.ProductMapper.delete",5);
+			Assert.assertEquals(1, count);
+			// 提交
+			session.commit();
+		 } catch (Exception e){
+			e.printStackTrace();
+			// 回滚
+			session.rollback();
+		} finally {
+			// 关闭会话
+			session.close();
+		
+		}
+	}
+	
 }

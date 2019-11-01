@@ -2,32 +2,78 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <!-- namespace 命名空间  其实就是映射文件在项目中地址 -->
+<!-- namespace 命名空间 其实就是映射文件在项目中地址 -->
 <mapper namespace="com.yc.damai.dao.ProductMapper">
 
 
 	<!-- 手动映射 -->
 	<resultMap id="baseMapper" type="com.yc.damai.bean.Product">
-	<!-- property 定义实体类  column 数据库的字段名      -->
-	<result property="marketPrice" column="market_price" ></result>
-	<result property="shopPrice" column="shop_price" ></result>
-	<result property="isHot" column="is_Hot" ></result>
-	
+		<!-- property 定义实体类 column 数据库的字段名 -->
+		<result property="marketPrice" column="market_price"></result>
+		<result property="shopPrice" column="shop_price"></result>
+		<result property="isHot" column="is_Hot"></result>
+
 	</resultMap>
+
+	<resultMap id="baseUser" type="com.yc.damai.bean.User">
+		<!-- property 定义实体类 column 数据库的字段名 -->
+		<result property="email" column="email"></result>
+		<result property="code" column="code"></result>
+		<result property="state" column="state"></result>
+
+	</resultMap>
+
 
 	<!-- 查询所有商品 -->
 	<select id="selectAll" resultMap="baseMapper">
 		select * from product
 	</select>
-	<!-- 带参数的查询 命名参数  #{pid} -->
+	<!-- 带参数的查询 命名参数 #{pid} -->
 	<select id="selectByPid" resultMap="baseMapper">
-		select * from product where pid = #{pid}
+		select * from product where
+		pid = #{pid}
 	</select>
 	<!-- 新增 -->
 	<insert id="create">
-		insert into product values(null,#{pname},#{marketPrice},#{shopPrice},
+		insert into product
+		values(null,#{pname},#{marketPrice},#{shopPrice},
 		#{image},#{pdesc},#{isHot},#{pdate},#{csid})
 	</insert>
+	<!-- 1、实现根据用户名对用户进行模糊查询 -->
+	<select id="selectByuid" resultMap="baseUser">
+
+		select * from user where username like "%"#{username}"%"
+
+	</select>
 	
+	<select id="selectUid" resultMap="baseUser">
+
+		select * from user where username  = #{username}
+
+	</select>
+
+	<!-- 2、根据用户名+密码实现登录查询 -->
+	<select id="selectLogin" resultMap="baseUser">
+
+		select * from user where username = #{username} and password = #{password}
+
+	</select>
+	<!-- 定义增删改3个sql，分别测试，并使用事务管理 -->
+	<insert id="createUser">
+		insert into user
+		values (#{uid}, #{username},#{password},#{name},#{email},#{phone},#{sex},#{state},#{code} ,#{addr})
+		
+	</insert>
 	
+	<update id="update">
+	update user set  username = #{username} , password = #{password}
+		, name= #{name} , email = #{email} , phone = #{phone}
+		, sex = #{sex} , state = #{state} , code = #{code} , addr= #{addr}
+		where uid = #{uid}
+	</update>
+	
+	<delete id="delete">
+	delete from user where uid = #{uid}
+	</delete>
+
 </mapper>
