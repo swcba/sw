@@ -1,9 +1,6 @@
 package com.yc.damai.dao;
-
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -15,8 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.yc.damai.bean.Category;
+import com.yc.damai.bean.Categorysecond;
 
-public class CategoryMapperTest {
+public class CategorysecondMapperTest {
 
 	private SqlSession session;
 
@@ -33,13 +31,19 @@ public class CategoryMapperTest {
 	}
 
 	@Test
-	public void testSelectById() throws IOException{
-		Category c = session.selectOne("com.yc.damai.dao.CategoryMapper.selectById",1);
+	public void testSelectByCid() throws IOException{
+		System.out.println("===========1==========");
+		List<Categorysecond> list = session.selectList("com.yc.damai.dao.CategorysecondMapper.selectByCid",1);
+		// 断言
+		System.out.println("===========2==========");
+		Assert.assertEquals(7,list.size());
+		System.out.println("===========3==========");
+		Assert.assertEquals("女装男装", list.get(0).getCategory().getCname());
+		System.out.println("===========4==========");
+		Assert.assertEquals(list.get(0).getCategory(), list.get(1).getCategory());
 
-		Assert.assertEquals("女装男装", c.getCname());
-		Assert.assertEquals(7,c.getCsItems().size());
-		Assert.assertEquals("潮流女装", c.getCsItems().get(0).getCsname());
-		System.out.println(c.getCsItems().get(0).getCsname());
+		// list.get(0).getCategory() == list.get(1).getCategory();
+
 		session.close();
 	}
 
