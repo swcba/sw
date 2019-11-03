@@ -113,7 +113,7 @@ public class ProductMapperTest {
 		
 			try {
 				User user = new User();
-				user.setUid(5);
+				user.setUid(5L);
 				user.setUsername("sw");
 				user.setPassword("yc");
 				user.setName("CBA");
