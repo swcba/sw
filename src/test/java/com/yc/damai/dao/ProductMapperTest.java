@@ -3,6 +3,7 @@ package com.yc.damai.dao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,6 +68,7 @@ public class ProductMapperTest {
 			
 			Assert.assertEquals(1, count);
 			
+			Assert.assertNotNull(p.getPid());
 			// 提交
 			session.commit();
 			
@@ -183,6 +186,86 @@ public class ProductMapperTest {
 			session.close();
 		
 		}
+	}
+	
+	@Test
+	public void selectByObj() {
+		session.selectList("com.yc.damai.dao.ProductMapper.selectByObj", null);
+		session.selectList("com.yc.damai.dao.ProductMapper.selectByObj");
+		Product p = session.selectOne("com.yc.damai.dao.ProductMapper.selectByObj", 56);
+		System.out.println(p);
+		p = new Product();
+		p.setPname("%zs%");
+		session.selectList("com.yc.damai.dao.ProductMapper.selectByObj",p);
+
+		p.setPdesc("%好衣服%");
+		session.selectList("com.yc.damai.dao.ProductMapper.selectByObj",p);
+		
+		
+		
+	}
+	
+	
+	
+	@Test
+	public void testSelectByFlag() {
+		HashMap<String, Object> param = new HashMap<String, Object>();
+		param.put("isHot", 1);
+		param.put("flag", 1);
+		session.selectList("com.yc.damai.dao.ProductMapper.selectByFlag", param);
+		param.put("flag", 2);
+		session.selectList("com.yc.damai.dao.ProductMapper.selectByFlag", param);
+
+		// 加入排序字段
+		param.put("ordername","shop_price");
+
+		param.put("flag", 3);
+		session.selectList("com.yc.damai.dao.ProductMapper.selectByFlag", param);
+
+		param.put("flag", 4);
+		session.selectList("com.yc.damai.dao.ProductMapper.selectByFlag", param);
+
+		
+		
+		
+		
+	}
+	
+	
+	
+	@Test
+	public void testUpdate() {
+		Product p =new Product();
+		p.setPid(2);
+		p.setPname("七匹狼");
+		session.update("com.yc.damai.dao.ProductMapper.modify", p);
+		session.commit();
+	}
+	@Test
+	public void testSelectInCsid(){
+		//int[] csids = {1,2,3,4};
+
+		List<Integer> csids = new ArrayList<>();
+		csids.add(1);
+		csids.add(2);
+		csids.add(3);
+		csids.add(4);
+		csids.add(5);
+	List<Product > list = 	session.selectList("com.yc.damai.dao.ProductMapper.selectInCsid",csids);
+	System.out.println(list.get(0).toString());
+	}
+
+	@Test
+	public void testSelect2(){
+		String sql = "select * from user";
+		List<?> list = session.selectList("com.yc.damai.dao.ProductMapper.select",sql);
+		System.out.println(list);
+	}
+
+	
+	@After
+	public void after() {
+		session.close();
 	}
 	
 }
