@@ -1,3 +1,10 @@
+<%@page import="com.yc.damai.bean.Orderitem"%>
+<%@page import="com.yc.damai.bean.Orders"%>
+<%@page import="com.yc.damai.bean.User"%>
+<%@page import="com.yc.damai.dao.MyBatisHelper"%>
+<%@page import="org.apache.ibatis.session.SqlSession"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -135,21 +142,31 @@
 					<li  >订单列表</li>
 				</ul>
 			</div>
+			<%
+			
+			SqlSession sess =  MyBatisHelper.getSession();
+			User user = sess.selectOne("com.yc.damai.dao.UserMapper.selectById",4);
+			
+			
+			%>
+			
+			<%for(Orders o : user.getOrders()){ %>
 				<table>
 					<tbody>
 					
 					<tr>
 						<th colspan="5">
-						订单号:73  
-						金额:<font color="red">30817.0 </font>
+						订单号:<%=o.getOid() %> 
+						金额:<font color="red"><%=o.getTotal() %> </font>
 						状态 :
-							<a href="pay.html?oid=73"><font color="red">付款</font></a>
+							<a href="pay.html?oid=<%=o.getOid() %> "><font color="red"><%=o.getState() %></font></a>
 						
 						
 						
 						
 						</th>
 					</tr>
+				
 					<tr>
 						<th>图片</th>
 						<th>商品</th>
@@ -157,176 +174,26 @@
 						<th>数量</th>
 						<th>小计</th>
 					</tr>
-						
+						<%for(Orderitem oi : o.getItems()){ %>
 						<tr>
 							<td width="60">
-								<img src="products/1/cs10001.jpg"/>
+								<img src="<%=oi.getProduct().getImage() %> "/>
 							</td>
 							<td>
-								<a target="_blank">韩版连帽加厚毛衣女外套</a>
+								<a target="_blank"><%=oi.getProduct().getPname() %></a>
 							</td>
 							<td>
-								228.0
+								<%=oi.getSubtotal() %>
 							</td>
 							<td class="quantity" width="60">
-									1							
+									<%=oi.getCount() %>							
 							</td>
 							<td width="140">
-								<span class="subtotal">￥228.0</span>
+								<span class="subtotal"><%=oi.getProduct().getShopPrice() %></span>
 							</td>
 						</tr>
-						
-						<tr>
-							<td width="60">
-								<img src="products/1/cs20004.jpg"/>
-							</td>
-							<td>
-								<a target="_blank">整貂皮大衣外套中长款收腰立领长袖进口真皮草裘皮</a>
-							</td>
-							<td>
-								9900.0
-							</td>
-							<td class="quantity" width="60">
-									3							
-							</td>
-							<td width="140">
-								<span class="subtotal">￥29700.0</span>
-							</td>
-						</tr>
-						
-						<tr>
-							<td width="60">
-								<img src="products/1/cs10007.jpg"/>
-							</td>
-							<td>
-								<a target="_blank">新款优雅奢华毛领白鸭绒轻薄羽绒服</a>
-							</td>
-							<td>
-								590.0
-							</td>
-							<td class="quantity" width="60">
-									1							
-							</td>
-							<td width="140">
-								<span class="subtotal">￥590.0</span>
-							</td>
-						</tr>
-						
-						<tr>
-							<td width="60">
-								<img src="products/1/cs60003.png"/>
-							</td>
-							<td>
-								<a target="_blank">商务修身羊毛呢子风衣 中长款呢大衣外套</a>
-							</td>
-							<td>
-								299.0
-							</td>
-							<td class="quantity" width="60">
-									1							
-							</td>
-							<td width="140">
-								<span class="subtotal">￥299.0</span>
-							</td>
-						</tr>
-						
-					
-					<tr>
-						<th colspan="5">
-						订单号:72  
-						金额:<font color="red">716.0 </font>
-						状态 :
-							<a href="pay.html?oid=72"><font color="red">付款</font></a>
-						
-						
-						
-						
-						</th>
-					</tr>
-					<tr>
-						<th>图片</th>
-						<th>商品</th>
-						<th>价格</th>
-						<th>数量</th>
-						<th>小计</th>
-					</tr>
-						
-						<tr>
-							<td width="60">
-								<img src="products/1/cs10002.jpg"/>
-							</td>
-							<td>
-								<a target="_blank">女装立领长袖拼接PU皮毛呢外套</a>
-							</td>
-							<td>
-								172.0
-							</td>
-							<td class="quantity" width="60">
-									2							
-							</td>
-							<td width="140">
-								<span class="subtotal">￥344.0</span>
-							</td>
-						</tr>
-						
-						<tr>
-							<td width="60">
-								<img src="products/1/cs40001.png"/>
-							</td>
-							<td>
-								<a target="_blank">打底衫加厚修身羊毛衫女装羊绒衫</a>
-							</td>
-							<td>
-								186.0
-							</td>
-							<td class="quantity" width="60">
-									2							
-							</td>
-							<td width="140">
-								<span class="subtotal">￥372.0</span>
-							</td>
-						</tr>
-						
-					
-					<tr>
-						<th colspan="5">
-						订单号:64  
-						金额:<font color="red">228.0 </font>
-						状态 :
-							<a href="pay.html?oid=64"><font color="red">付款</font></a>
-						
-						
-						
-						
-						</th>
-					</tr>
-					<tr>
-						<th>图片</th>
-						<th>商品</th>
-						<th>价格</th>
-						<th>数量</th>
-						<th>小计</th>
-					</tr>
-						
-						<tr>
-							<td width="60">
-								<img src="products/1/cs10001.jpg"/>
-							</td>
-							<td>
-								<a target="_blank">韩版连帽加厚毛衣女外套</a>
-							</td>
-							<td>
-								228.0
-							</td>
-							<td class="quantity" width="60">
-									1							
-							</td>
-							<td width="140">
-								<span class="subtotal">￥228.0</span>
-							</td>
-						</tr>
-						
-					
+						<%} %>
+					<%} %>
 				</tbody>
 				
 			</table>

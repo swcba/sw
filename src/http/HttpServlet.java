@@ -1,5 +1,11 @@
 package http;
 
+import java.lang.reflect.Method;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 public class HttpServlet {
 
 	public void service(HttpServletRequest request,HttpServletResponse response) {
@@ -23,7 +29,8 @@ public class HttpServlet {
 		
 	}
 	public void doGet(HttpServletRequest request,HttpServletResponse response) {
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated method stub
+				
 	}
 	public void doPost(HttpServletRequest request,HttpServletResponse response) {
 		// TODO Auto-generated constructor stub

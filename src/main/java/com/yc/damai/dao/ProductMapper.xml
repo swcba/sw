@@ -34,9 +34,9 @@
 		pid = #{pid}
 	</select>
 	<!-- 新增 -->
-	<!-- useGeneratedKeys 开启自增列返回值功能  keyColumn 自增列名 keyProperty 对应的属性名-->
-	<insert id="create" useGeneratedKeys="true" 
-		keyColumn="pid" keyProperty="pid">
+	<!-- useGeneratedKeys 开启自增列返回值功能 keyColumn 自增列名 keyProperty 对应的属性名 -->
+	<insert id="create" useGeneratedKeys="true" keyColumn="pid"
+		keyProperty="pid">
 		insert into product
 		values(null,#{pname},#{marketPrice},#{shopPrice},
 		#{image},#{pdesc},#{isHot},#{pdate},#{csid})
@@ -44,147 +44,137 @@
 	<!-- Oracle 获取 序列值 使用 selectKey -->
 	<insert id="createByOracle" useGeneratedKeys="true">
 		<selectKey keyColumn="pid" keyProperty="pid" order="BEFORE">
-			select seq_pid.nextval from dual
+			select
+			seq_pid.nextval from dual
 		</selectKey>
 		insert into product values(null,#{pname},#{marketPrice},#{shopPrice},
 		#{image},#{pdesc},#{isHot},#{pdate},#{csid})
 	</insert>
-	
+
 	<!-- 1、实现根据用户名对用户进行模糊查询 -->
 	<select id="selectByuid" resultMap="baseUser">
 
-		select * from user where username like "%"#{username}"%"
+		select * from user where
+		username like "%"#{username}"%"
 
 	</select>
-	
+
 	<select id="selectUid" resultMap="baseUser">
 
-		select * from user where username  = #{username}
+		select * from user where
+		username = #{username}
 
 	</select>
 
 	<!-- 2、根据用户名+密码实现登录查询 -->
 	<select id="selectLogin" resultMap="baseUser">
 
-		select * from user where username = #{username} and password = #{password}
+		select * from user where
+		username = #{username} and password = #{password}
 
 	</select>
 	<!-- 定义增删改3个sql，分别测试，并使用事务管理 -->
 	<insert id="createUser">
 		insert into user
-		values (#{uid}, #{username},#{password},#{name},#{email},#{phone},#{sex},#{state},#{code} ,#{addr})
-		
+		values (#{uid},
+		#{username},#{password},#{name},#{email},#{phone},#{sex},#{state},#{code}
+		,#{addr})
+
 	</insert>
-	
+
 	<update id="update">
-	update user set  username = #{username} , password = #{password}
-		, name= #{name} , email = #{email} , phone = #{phone}
-		, sex = #{sex} , state = #{state} , code = #{code} , addr= #{addr}
+		update user set username = #{username} , password = #{password}
+		, name=
+		#{name} , email = #{email} , phone = #{phone}
+		, sex = #{sex} , state =
+		#{state} , code = #{code} , addr= #{addr}
 		where uid = #{uid}
 	</update>
-	
+
 	<delete id="delete">
-	delete from user where uid = #{uid}
+		delete from user where uid = #{uid}
 	</delete>
-	<!-- <if test=""></if>
-	<choose></choose>
-	<foreach collection=""></foreach>
-	<where></where>
-	<set></set>
-	<sql></sql>
-	<include refid=""></include>
-	
-	<if test="ordername != null">
-			order by ${ordername}
-	</if>	
-	<selectKey></selectKey> -->
-	<select id="selectByObj" resultType="com.yc.damai.bean.Product" >
-	
-	select * from product where 1=1
-	<if test="pname != null">
-	and pname like #{pname}
-	</if>
-	
-	<if test=" pdesc !=null">
-	and pdesc like #{pdesc}
-	</if>
-	
-	
+	<!-- <if test=""></if> <choose></choose> <foreach collection=""></foreach> 
+		<where></where> <set></set> <sql></sql> <include refid=""></include> <if 
+		test="ordername != null"> order by ${ordername} </if> <selectKey></selectKey> -->
+	<select id="selectByObj" resultType="com.yc.damai.bean.Product">
+
+		select * from product where 1=1
+		<if test="pname != null">
+			and pname like #{pname}
+		</if>
+
+		<if test=" pdesc !=null">
+			and pdesc like #{pdesc}
+		</if>
+
+
 	</select>
 
-<select id="selectByFlag" resultType="com.yc.damai.bean.Product" >
+	<select id="selectByFlag" resultType="com.yc.damai.bean.Product">
 
 
-	<!-- 查询is_hot
-	flag 参数 ==1；精确查询 is_hot= ？
-	flag 参数==2；精确查询is_hot like ？
-	flag 参数 == 3；精确查询 is  null;
-	flag 参数 == 4 ；精确查询 is not null;
-	
-	 -->
-	select * from product
-	
-	<where>
-		<choose>
-			<when test=" flag == 1">
-			is_hot = #{isHot}
-			</when>
-			<when test=" flag == 2">
-			is_hot like #{isHot}
-			</when>
-			<when test=" flag == 3">
-			is_hot is null
-			</when>
-			<when test=" flag == 4">
-			is_hot is not null
-			</when>
-			<otherwise>
-				is_hot = 1
-			
-			
-			</otherwise>
-		
-		
-		
-		
-		</choose>
-	
-	
-	</where>
-	
+		<!-- 查询is_hot flag 参数 ==1；精确查询 is_hot= ？ flag 参数==2；精确查询is_hot like ？ flag 
+			参数 == 3；精确查询 is null; flag 参数 == 4 ；精确查询 is not null; -->
+		select * from product
 
-</select>
+		<where>
+			<choose>
+				<when test=" flag == 1">
+					is_hot = #{isHot}
+				</when>
+				<when test=" flag == 2">
+					is_hot like #{isHot}
+				</when>
+				<when test=" flag == 3">
+					is_hot is null
+				</when>
+				<when test=" flag == 4">
+					is_hot is not null
+				</when>
+				<otherwise>
+					is_hot = 1
 
-<update id="modify">
-	
-	update product 
-	
-	<set>
-	<if test="pname != null">
-	pname = #{pname}
-	</if>
-	<if test="pdesc != null">
-	pdesc = #{pdesc}
-	</if>
-	<if test="image != null">
-	image = #{image}
-	</if>
-	
-	
-	</set>
-	where pid = #{pid}
-</update>
+				</otherwise>
 
-<select id="selectInCsid" resultType="com.yc.damai.bean.Product">
-		select 
+			</choose>
+
+
+		</where>
+
+
+	</select>
+
+	<update id="modify">
+
+		update product
+
+		<set>
+			<if test="pname != null">
+				pname = #{pname}
+			</if>
+			<if test="pdesc != null">
+				pdesc = #{pdesc}
+			</if>
+			<if test="image != null">
+				image = #{image}
+			</if>
+
+
+		</set>
+		where pid = #{pid}
+	</update>
+
+	<select id="selectInCsid" resultType="com.yc.damai.bean.Product">
+		select
 		<include refid="baseColumns"></include>
 		from product
 		<where>
-		
-		
+
+
 			<!-- open 生成语句前面的部分 -->
-			<foreach collection="collection" item="item" 
-			      open="csid in (" separator="," close=")">
+			<foreach collection="collection" item="item" open="csid in ("
+				separator="," close=")">
 				#{item}
 			</foreach>
 		</where>
@@ -197,11 +187,11 @@
 		pname,image,shop_price
 
 	</sql>
-	
 
-	<!-- 统计查询  复杂的查询 -->
-	<select id="select" resultType="map" >
+
+	<!-- 统计查询 复杂的查询 -->
+	<select id="select" resultType="map">
 		${sql}
 	</select>
-	
+
 </mapper>

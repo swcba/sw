@@ -13,6 +13,12 @@
 
 	<!-- select * from categorysecond   -->
 
+	<select id = "selectAll " resultType="com.yc.damai.bean.Category">
+			select * from category
+	
+	
+	</select>
+
 	<select id="selectById" resultMap="baseMap">
 		select * from category where cid=#{cid}
 	</select>

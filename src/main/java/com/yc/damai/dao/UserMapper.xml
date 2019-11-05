@@ -13,5 +13,48 @@
 	<select id="selectById" resultMap="baseMap">
 		select * from user where uid = #{uid}
 	</select>
+	<!-- 1、实现根据用户名对用户进行模糊查询 -->
+	<select id="selectByUname" resultMap="baseMap">
+
+		select * from user where
+		username like "%"#{username}"%"
+
+	</select>
+
+	<select id="selectUname" resultMap="baseMap">
+
+		select * from user where
+		username = #{username}
+
+	</select>
+
+	<!-- 2、根据用户名+密码实现登录查询 -->
+	<select id="selectLogin" resultType="com.yc.damai.bean.User">
+
+		select * from user where
+		username = #{username} and password = #{password}
+
+	</select>
+	<!-- 定义增删改3个sql，分别测试，并使用事务管理 -->
+	<insert id="createUser">
+		insert into user
+		values (#{uid},
+		#{username},#{password},#{name},#{email},#{phone},#{sex},#{state},#{code}
+		,#{addr})
+
+	</insert>
+
+	<update id="update">
+		update user set username = #{username} , password = #{password}
+		, name=
+		#{name} , email = #{email} , phone = #{phone}
+		, sex = #{sex} , state =
+		#{state} , code = #{code} , addr= #{addr}
+		where uid = #{uid}
+	</update>
+
+	<delete id="delete">
+		delete from user where uid = #{uid}
+	</delete>
 	
 </mapper>
