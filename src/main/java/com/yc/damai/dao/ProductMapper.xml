@@ -4,7 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace 命名空间 其实就是映射文件在项目中地址 -->
 <mapper namespace="com.yc.damai.dao.ProductMapper">
+<!-- 开启二级缓存 -->
+<cache>
 
+
+</cache>
 
 	<!-- 手动映射 -->
 	<resultMap id="baseMapper" type="com.yc.damai.bean.Product">
@@ -25,14 +29,14 @@
 
 
 	<!-- 查询所有商品 -->
-	<select id="selectAll" resultMap="baseMapper">
+	<!-- <select id="selectAll" resultMap="baseMapper">
 		select * from product
 	</select>
-	<!-- 带参数的查询 命名参数 #{pid} -->
+	带参数的查询 命名参数 #{pid}
 	<select id="selectByPid" resultMap="baseMapper">
 		select * from product where
 		pid = #{pid}
-	</select>
+	</select> -->
 	<!-- 新增 -->
 	<!-- useGeneratedKeys 开启自增列返回值功能 keyColumn 自增列名 keyProperty 对应的属性名 -->
 	<insert id="create" useGeneratedKeys="true" keyColumn="pid"
@@ -97,7 +101,7 @@
 	<!-- <if test=""></if> <choose></choose> <foreach collection=""></foreach> 
 		<where></where> <set></set> <sql></sql> <include refid=""></include> <if 
 		test="ordername != null"> order by ${ordername} </if> <selectKey></selectKey> -->
-	<select id="selectByObj" resultType="com.yc.damai.bean.Product">
+	<select id="selectByObj" resultMap="baseMapper">
 
 		select * from product where 1=1
 		<if test="pname != null">
@@ -107,8 +111,12 @@
 		<if test=" pdesc !=null">
 			and pdesc like #{pdesc}
 		</if>
-
-
+		<if test=" csid != null">
+			and csid =#{csid}
+		</if>
+		<if test=" pid != null">
+			and pid =#{pid}
+		</if>
 	</select>
 
 	<select id="selectByFlag" resultType="com.yc.damai.bean.Product">
@@ -151,13 +159,13 @@
 
 		<set>
 			<if test="pname != null">
-				pname = #{pname}
+				pname = #{pname},
 			</if>
 			<if test="pdesc != null">
-				pdesc = #{pdesc}
+				pdesc = #{pdesc},
 			</if>
 			<if test="image != null">
-				image = #{image}
+				image = #{image},
 			</if>
 
 
@@ -193,5 +201,25 @@
 	<select id="select" resultType="map">
 		${sql}
 	</select>
+
+
+	<!-- MyBatis 调用存储过程  -->
+	<select id="getBlogCountByName" statementType="CALLABLE"  parameterType="java.util.HashMap">
+		<![CDATA[
+			{call proc_getBlogCountByAuthor (
+			
+				#{username,  mode=IN,  jdbcType=VARCHAR },
+				
+				#{blogCount,
+					mode=OUT,
+					jdbcType=INTEGER}
+			)}
+		]]>
+	</select>
+
+	<!-- <select id="selectByPnameAndIsHot" resultType="com.yc.damai.bean.Product">
+		select * from product where pname=#{pname} and is_hot=#{isHot}
+	</select> -->
+
 
 </mapper>

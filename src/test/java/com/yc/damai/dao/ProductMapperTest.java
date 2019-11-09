@@ -23,6 +23,7 @@ import com.yc.damai.bean.User;
 public class ProductMapperTest {
 	
 	private SqlSession  session;
+	private SqlSession  session1;
 
 	@Before
 	public void before() throws IOException{
@@ -44,9 +45,16 @@ public class ProductMapperTest {
 	}
 	
 	
-	
+	@Test
 	public void testSelectByPid() throws IOException{
 		Product p = session.selectOne("com.yc.damai.dao.ProductMapper.selectByPid", 56);
+		System.out.println(p);
+		System.out.println("===========1===========");
+		session.update("com.yc.damai.dao.ProductMapper.modify",p);
+		session.selectOne("com.yc.damai.dao.ProductMapper.selectByPid", 56);
+		System.out.println("===========2===========");
+		session.selectOne("com.yc.damai.dao.ProductMapper.selectByPid", 56);
+		System.out.println("===========3===========");
 		System.out.println(p);
 	}
 	
@@ -261,8 +269,38 @@ public class ProductMapperTest {
 		List<?> list = session.selectList("com.yc.damai.dao.ProductMapper.select",sql);
 		System.out.println(list);
 	}
+	@Test
+	public void testCache() throws IOException{
 
+		// Cache Hit Ratio [com.yc.damai.dao.ProductMapper]: 0.0
+		// 缓存命中
+
+		Product p = session.selectOne("com.yc.damai.dao.ProductMapper.selectByPid", 56);
+		System.out.println(p);
+		System.out.println("==============1==========");
+
+		// 必须关闭或提交，才能二级缓存才会缓存会话的数据
+		session.close();
+
+		session1.selectOne("com.yc.damai.dao.ProductMapper.selectByPid", 56);
+		System.out.println("==============2==========");
+
+	}
 	
+	@Test
+	public void selectAllForInterface() {
+		ProductMapper pm= session.getMapper(ProductMapper.class);
+		pm.selectAll();
+	//	pm.selectByPid(1);
+		pm.selectByPnameAndIsHot("冬装外套棉衣立领修身商务大码男装潮牌上衣", 1);
+	}
+	@Test
+	public void testSelectBySQL(){
+		ProductMapper pm = session.getMapper(ProductMapper.class);
+		String sql = "select max(shop_price)  maxp , min(shop_price)  minp from product";
+		List<Map<String,Object>> list = pm.selectBySql(sql);
+		System.out.println(list);
+	}
 	@After
 	public void after() {
 		session.close();

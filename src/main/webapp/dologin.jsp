@@ -35,6 +35,7 @@
 	if(list.size()!=0 ) {
 		request.setAttribute("msg", "登录成功");
 		request.getSession().setAttribute("user", list.get(0));
+		
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}else {
 		request.setAttribute("msg", "用户名或密码错误");

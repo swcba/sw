@@ -1,25 +1,23 @@
 package com.yc.damai.dao;
 
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Assert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.yc.damai.bean.Category;
+import com.yc.damai.bean.Cart;
+import com.yc.damai.bean.Cartitem;
 
-public class CategoryMapperTest {
-
-	private SqlSession session;
-
+public class CartTest {
+	private SqlSession  session;
+	
 	@Before
 	public void before() throws IOException{
 		// 初始化 MyBatis 矿建
@@ -31,19 +29,40 @@ public class CategoryMapperTest {
 		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 		session = sqlSessionFactory.openSession();
 	}
-
+	
 	@Test
-	public void testSelectById() throws IOException{
-		Category c = session.selectOne("com.yc.damai.dao.CategoryMapper.selectById",1);
-
-		Assert.assertEquals("女装男装", c.getCname());
-		Assert.assertEquals(7,c.getCsItems().size());
-		Assert.assertEquals("潮流女装", c.getCsItems().get(0).getCsname());
-		System.out.println(c.getCsItems().get(0).getCsname());
+	public void selectTest() {
+		CartMapper cm = session.getMapper(CartMapper.class);
+		List<Cart> c = cm.selectAll();
+		System.out.println(c.get(0).toString());
+		
+	}
+	
+	@Test
+	public void SelectTest() {
+		CartitemMapper cim = session.getMapper(CartitemMapper.class);
+		List<Cartitem> list = cim.selectAll();
+		
+		System.out.println(list.get(0).toString());
+		
+	}
+	
+	@Test
+	public void insetTest() {
+		
+		Cartitem	c = new Cartitem();
+		
+		c.setUid(1);
+		c.setCount(1);
+		c.setPid(3L);
+		
+		session.insert("com.yc.damai.dao.CartitemMapper.create",c);
+		
+		session.commit();
+	}
+	@After
+	public void after() {
 		session.close();
 	}
-
-	
-	
 
 }

@@ -49,8 +49,8 @@
 		<mapper resource="com/yc/damai/dao/ProductMapper.xml" />
 		<mapper resource="com/yc/damai/dao/CategoryMapper.xml" />
 		<mapper resource="com/yc/damai/dao/CategorysecondMapper.xml" />
-		
-		
+		<mapper resource="com/yc/damai/dao/CartMapper.xml" />
+		<mapper resource="com/yc/damai/dao/CartitemMapper.xml" />
 		<mapper resource="com/yc/damai/dao/OrderMapper.xml" />
 		<mapper resource="com/yc/damai/dao/OrderitemMapper.xml" />
 		<mapper resource="com/yc/damai/dao/UserMapper.xml" />
